@@ -1,0 +1,29 @@
+<h2>Listing Repositories</h2>
+
+<div class="container">
+<button class="btn btn-primary" id="elixir">Elixir</button>
+  <button class="btn btn-primary" id="python">Python</button>
+  <button class="btn btn-primary" id="php">PHP</button>
+  <button class="btn btn-primary" id="elm">Elm</button>
+  <button class="btn btn-primary" id="javascript">Javascript</button>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Full name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for repository <- @repositories do %>
+    <tr>
+      <td><%= repository.full_name %></td>
+      <td class="text-right">
+        <span><%= link "Show", to: repository_path(@conn, :show, repository), class: "btn btn-default btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+

@@ -1,0 +1,43 @@
+<h2>Show Repository</h2>
+
+<ul>
+
+  <li>
+    <strong>Full name:</strong>
+    <%= @repository.full_name %>
+  </li>
+
+  <li>
+    <strong>Html url:</strong>
+    <%= @repository.html_url %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @repository.description %>
+  </li>
+
+  <li>
+    <strong>Language:</strong>
+    <%= @repository.language %>
+  </li>
+
+  <li>
+    <strong>Stargazers count:</strong>
+    <%= @repository.stargazers_count %>
+  </li>
+
+  <li>
+    <strong>Watchers count:</strong>
+    <%= @repository.watchers_count %>
+  </li>
+
+  <li>
+    <strong>Owner:</strong>
+    <%= @repository.owner %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: repository_path(@conn, :edit, @repository) %></span>
+<span><%= link "Back", to: repository_path(@conn, :index) %></span>
