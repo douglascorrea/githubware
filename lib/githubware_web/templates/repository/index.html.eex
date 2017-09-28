@@ -1,17 +1,18 @@
-<h2>Listing Repositories</h2>
+<h2>Listing Repositories with more than 1000 stars</h2>
 
 <div class="container">
-<button class="btn btn-primary" id="elixir">Elixir</button>
-  <button class="btn btn-primary" id="python">Python</button>
-  <button class="btn btn-primary" id="php">PHP</button>
-  <button class="btn btn-primary" id="elm">Elm</button>
-  <button class="btn btn-primary" id="javascript">Javascript</button>
+<a class="btn btn-primary" href="<%= repository_path(@conn, :list_lang_repositories, "elixir") %>">Elixir</a>
+  <a class="btn btn-primary" href="<%= repository_path(@conn, :list_lang_repositories, "elm") %>">Elm</a>
+  <a class="btn btn-primary" href="<%= repository_path(@conn, :list_lang_repositories, "clojure") %>">Clojure</a>
+  <a class="btn btn-primary" href="<%= repository_path(@conn, :list_lang_repositories, "rust") %>">Rust</a>
+  <a class="btn btn-primary" href="<%= repository_path(@conn, :list_lang_repositories, "scala") %>">Scala</a>
 </div>
 
 <table class="table">
   <thead>
     <tr>
       <th>Full name</th>
+      <th>Stars</th>
       <th></th>
     </tr>
   </thead>
@@ -19,8 +20,9 @@
 <%= for repository <- @repositories do %>
     <tr>
       <td><%= repository.full_name %></td>
+      <td><%= repository.stargazers_count %></td>
       <td class="text-right">
-        <span><%= link "Show", to: repository_path(@conn, :show, repository), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Show", to: repository_path(@conn, :show, @lang, repository), class: "btn btn-default btn-xs" %></span>
       </td>
     </tr>
 <% end %>

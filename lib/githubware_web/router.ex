@@ -15,10 +15,9 @@ defmodule GithubwareWeb.Router do
 
   scope "/", GithubwareWeb do
     pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
-    get "/repositories", RepositoryController, :index
-    resources "/repos", RepositoryApiController
+    get "/:lang", RepositoryController, :list_lang_repositories
+    get "/", RepositoryController, :index
+    get "/:lang/:id", RepositoryController, :show
   end
 
   # Other scopes may use custom stacks.

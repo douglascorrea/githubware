@@ -25,7 +25,6 @@ defmodule Githubware.Repositories.Repository do
     |> Map.update!(:owner,&(&1[:owner]["login"]))
     |> Map.update(:github_id,attrs[:id], &(&1[:id]))
 
-
     repository
     |> cast(attrs, [:full_name, :html_url, :github_id, :description, :language, :stargazers_count, :watchers_count, :owner])
   end

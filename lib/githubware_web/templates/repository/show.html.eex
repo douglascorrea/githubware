@@ -39,5 +39,4 @@
 
 </ul>
 
-<span><%= link "Edit", to: repository_path(@conn, :edit, @repository) %></span>
-<span><%= link "Back", to: repository_path(@conn, :index) %></span>
+<span><%= link "Back", to: repository_path(@conn, :list_lang_repositories, @lang) %></span>

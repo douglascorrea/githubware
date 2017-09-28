@@ -5,56 +5,34 @@ defmodule GithubwareWeb.RepositoryController do
   alias Githubware.Repositories.Repository
 
   def index(conn, _params) do
-    repositories = Repositories.list_repositories()
-    render(conn, "index.html", repositories: repositories)
+    render(conn, "index.html", repositories: [])
   end
 
-  def new(conn, _params) do
-    changeset = Repositories.change_repository(%Repository{})
-    render(conn, "new.html", changeset: changeset)
+  def list_lang_repositories(conn, %{"lang" => lang}) do
+    client = Tentacat.Client.new
+
+    repositories =
+      case Tentacat.Search.repositories(%{q: "language:#{lang} stars:>1000", sort: "stars"}, client) do
+        %{"items" => items} ->
+          Enum.take(items, 5)
+        items when is_list(items) ->
+          items
+          |> Enum.at(0)
+          |> Map.get("items")
+          |> Enum.take(5)
+        _ ->
+          []
+      end
+
+    Enum.each repositories, fn (rep) -> Repositories.create_or_update_repository(rep) end
+    repositories = Repositories.list_repositories(String.capitalize(lang))
+
+    render(conn, "index.html", repositories: repositories, lang: lang)
   end
 
-  def create(conn, %{"repository" => repository_params}) do
-    case Repositories.create_repository(repository_params) do
-      {:ok, repository} ->
-        conn
-        |> put_flash(:info, "Repository created successfully.")
-        |> redirect(to: repository_path(conn, :show, repository))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
-  end
-
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id, "lang" => lang}) do
     repository = Repositories.get_repository!(id)
-    render(conn, "show.html", repository: repository)
+    render(conn, "show.html", repository: repository, lang: lang)
   end
 
-  def edit(conn, %{"id" => id}) do
-    repository = Repositories.get_repository!(id)
-    changeset = Repositories.change_repository(repository)
-    render(conn, "edit.html", repository: repository, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "repository" => repository_params}) do
-    repository = Repositories.get_repository!(id)
-
-    case Repositories.update_repository(repository, repository_params) do
-      {:ok, repository} ->
-        conn
-        |> put_flash(:info, "Repository updated successfully.")
-        |> redirect(to: repository_path(conn, :show, repository))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", repository: repository, changeset: changeset)
-    end
-  end
-
-  def delete(conn, %{"id" => id}) do
-    repository = Repositories.get_repository!(id)
-    {:ok, _repository} = Repositories.delete_repository(repository)
-
-    conn
-    |> put_flash(:info, "Repository deleted successfully.")
-    |> redirect(to: repository_path(conn, :index))
-  end
 end
