@@ -19,7 +19,6 @@ defmodule Githubware.Repositories.Repository do
 
   @doc false
   def changeset(%Repository{} = repository, attrs) do
-    attrs = for {key, val} <- attrs, into: %{}, do: {String.to_atom(key), val}
     attrs =
     attrs
     |> Map.update!(:owner,&(&1[:owner]["login"]))

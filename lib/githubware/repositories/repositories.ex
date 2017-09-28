@@ -29,6 +29,7 @@ defmodule Githubware.Repositories do
   @doc """
   Gets a single repository by github id
   """
+  def get_repository_by_github_id(nil), do: nil
   def get_repository_by_github_id(github_id), do: Repo.get_by(Repository, github_id: github_id)
 
   @doc """
@@ -59,16 +60,18 @@ defmodule Githubware.Repositories do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_or_update_repository(repository) do
-    case get_repository_by_github_id(repository["id"]) do
+  def create_or_update_repository(attrs) do
+
+    attrs = for {key, val} <- attrs, into: %{}, do: {String.to_atom(key), val}
+    case get_repository_by_github_id(attrs.id) do
       nil ->
-        repository_to_insert = %Repository{}
-                               |> Repository.changeset(repository)
-                               |> Repo.insert()
+        %Repository{}
+        |> Repository.changeset(attrs)
+        |> Repo.insert()
 
       repo_found ->
         repo_found
-        |> Repository.changeset(repository)
+        |> Repository.changeset(attrs)
         |> Repo.update()
 
     end

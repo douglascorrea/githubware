@@ -2,7 +2,6 @@ defmodule GithubwareWeb.RepositoryController do
   use GithubwareWeb, :controller
 
   alias Githubware.Repositories
-  alias Githubware.Repositories.Repository
 
   def index(conn, _params) do
     render(conn, "index.html", repositories: [])
